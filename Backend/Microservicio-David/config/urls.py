@@ -1,22 +1,24 @@
-"""
-URL configuration for config project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/6.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path
+from rest_framework.routers import DefaultRouter
+from django.urls import path, include
 
+from companies.views import MaterialListingViewSet, health
+
+# Crea un router para registrar rutas REST automáticamente.
+router = DefaultRouter()
+
+# Registra las rutas de publicaciones de materiales.
+router.register(r"material-listings", MaterialListingViewSet, basename="material-listings")
+
+# Expone las rutas públicas de la app.
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("health/", health),
+    path("", include(router.urls)),
+]
+
+# Define las rutas principales del proyecto.
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("api/v1/", include("companies.urls")),
 ]

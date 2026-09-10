@@ -1,0 +1,53 @@
+@FIREBASE_API_KEY = AIzaSyCa0z_T4qXgmGQmuTRg4iHpMKGxLI5oZyk
+
+@EMAIL = nperez@uniempresarial.edu.co
+@PASSWORD = 123456+
+@BACKEND_URL = http://127.0.0.1:8000
+
+### 1. INICIAR SESIÓN EN FIREBASE
+# @name firebaseLogin
+POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={{FIREBASE_API_KEY}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "{{EMAIL}}",
+  "password": "{{PASSWORD}}",
+  "returnSecureToken": true
+}
+
+### 2. CONSULTAR MATERIALS CON EL TOKEN OBTENIDO
+GET {{BACKEND_URL}}/api/v1/materials/
+Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
+Accept: application/json
+
+### 3. CREAR UN MATERIAL NUEVO
+POST {{BACKEND_URL}}/api/v1/materials/
+Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "material_type": "Algodón perchado",
+  "quantity": 100,
+  "unit": "metros",
+  "color": "negro",
+  "densidad": "pesado",
+  "status": "available",
+  "published_by": "demo-owner"
+}
+
+### 3. EDITAR UN MATERIAL NUEVO
+PUT {{BACKEND_URL}}/api/v1/materials/6aa340d2372cc2b4cc1ab3b5/
+Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "material_type": "Algodón perchado",
+  "quantity": 200,
+  "unit": "metros",
+  "color": "negro",
+  "densidad": "pesado",
+  "status": "available"
+}
