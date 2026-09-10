@@ -36,24 +36,24 @@ market-materials-service/
 └── requirements.txt             ← REEMPLAZA/agrega el que te entrego
 ```
 
-## Pasos para dejarlo corriendo
+## Pasos para dejarlo corriendo (MongoDB)
 
 1. **Copiar `materials/`** completa a la raíz del repo, al lado de `config/`.
-2. **Reemplazar `config/settings.py` y `config/urls.py`** por los que te entrego (ya incluyen todo lo de `materials`, MySQL y CORS).
-3. **Instalar dependencias**:
+2. **Reemplazar `config/settings.py` y `config/urls.py`** por los que te entrego.
+3. **Tener MongoDB corriendo** localmente (o con Docker: `docker run -d --name mongo-materiales -p 27017:27017 mongo:7`).
+4. **Instalar dependencias**:
    ```bash
    pip install -r requirements.txt
    ```
-   (`mysqlclient` necesita las librerías de desarrollo de MySQL en el sistema; si falla la instalación, dímelo y te doy la alternativa con `pymysql`.)
-4. **Crear el `.env`** a partir de `.env.example`, con tus credenciales de MySQL local. La línea de `FIREBASE_CREDENTIALS_PATH` queda **comentada** — no la actives todavía.
-5. **Migrar y cargar datos de ejemplo**:
+5. **Crear el `.env`** a partir de `.env.example`, con tu `MONGO_URI` y `MONGO_DB_NAME`. La línea de `FIREBASE_CREDENTIALS_PATH` queda **comentada** — no la actives todavía.
+6. **Migrar (solo tablas internas de Django) y cargar datos de ejemplo**:
    ```bash
-   python manage.py makemigrations materials
    python manage.py migrate
    python manage.py seed_materials
    python manage.py runserver
    ```
-6. **Probar**: `GET http://localhost:8000/api/v1/market-materials/` ya debería devolver los 9 materiales de ejemplo, sin necesitar ningún token todavía.
+   Nota: `migrate` aquí solo crea las tablas internas de Django (admin/auth/sesiones) en sqlite — los materiales no pasan por el ORM ni tienen migraciones.
+7. **Probar**: `GET http://localhost:8000/api/v1/market-materials/` ya debería devolver los 9 materiales de ejemplo, sin necesitar ningún token todavía.
 
 ## Endpoints
 

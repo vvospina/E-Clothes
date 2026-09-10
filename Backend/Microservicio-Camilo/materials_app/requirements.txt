@@ -29,10 +29,10 @@ tzdata==2026.3
 urllib3==2.7.0
 
 # =============================================================
-# AGREGADO para este microservicio (MySQL + filtros de la API)
+# MongoDB — reactivadas (mismo driver que usa companies/mongo.py)
 # =============================================================
-django-filter==25.2
-mysqlclient==2.2.7
+pymongo==4.17.0
+dnspython==2.8.0
 
 # =============================================================
 # Firebase Admin — se quedan instaladas para cuando se conecte el
@@ -58,8 +58,7 @@ pyasn1_modules==0.4.2
 pycparser==3.0
 
 # =============================================================
-# ELIMINADAS: solo las usaba companies/mongo.py (conexión MongoDB
-# directa con pymongo). Este microservicio usa MySQL, ya no aplica.
+# ELIMINADAS: eran solo para el enfoque anterior con MySQL/ORM.
 # =============================================================
-# pymongo==4.17.0
-# dnspython==2.8.0
+# django-filter==25.2
+# mysqlclient==2.2.7

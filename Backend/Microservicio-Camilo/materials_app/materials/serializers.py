@@ -1,25 +1,34 @@
-from rest_framework import serializers  # Serializers de DRF para convertir modelos <-> JSON.
-
-from .models import MarketMaterial  # Modelo que se va a serializar.
+from rest_framework import serializers  # Serializers de DRF para validar entrada/salida.
 
 
-class MarketMaterialSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MarketMaterial  # Modelo asociado a este serializer.
-        fields = [
-            "id",
-            "name",
-            "material_type",
-            "presentation",
-            "price",
-            "currency",
-            "supplier",
-            "description",
-            "active",
-            "created_at",
-            "updated_at",
-        ]  # Campos expuestos por la API.
-        read_only_fields = ["id", "created_at", "updated_at"]  # El cliente no puede escribir estos.
+class MarketMaterialSerializer(serializers.Serializer):
+    # No hereda de ModelSerializer porque no hay modelo Django detrás:
+    # los datos viven en MongoDB, se validan a mano campo por campo.
+
+    id = serializers.CharField(read_only=True)  # ObjectId de Mongo, ya convertido a string.
+
+    name = serializers.CharField(max_length=150)  # Nombre del material.
+
+    material_type = serializers.CharField(max_length=80)  # Categoría: tela, cuero, hilo...
+
+    presentation = serializers.CharField(max_length=50)  # retazo, metro, rollo, kg, unidad.
+
+    price = serializers.DecimalField(max_digits=12, decimal_places=2)  # Precio de esta presentación.
+
+    currency = serializers.CharField(max_length=3, required=False, default="COP")  # Moneda.
+
+    supplier = serializers.CharField(
+        max_length=150, required=False, allow_blank=True, allow_null=True
+    )  # Proveedor, opcional.
+
+    description = serializers.CharField(
+        required=False, allow_blank=True, allow_null=True
+    )  # Descripción libre, opcional.
+
+    active = serializers.BooleanField(required=False, default=True)  # Permite ocultar sin borrar.
+
+    created_at = serializers.CharField(read_only=True)  # Fecha ISO de creación (string, como en companies).
+    updated_at = serializers.CharField(read_only=True)  # Fecha ISO de última modificación.
 
     def validate_price(self, value):
         # Rechaza precios negativos o en cero.

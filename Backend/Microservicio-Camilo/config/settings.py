@@ -26,9 +26,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "django_filters",
     "corsheaders",
-    "materials",
+    "materials_app.materials",
 ]
 
 # Define la cadena de middlewares que procesa cada solicitud HTTP.
@@ -70,17 +69,16 @@ WSGI_APPLICATION = "config.wsgi.application"
 CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5173").split(",")
 
 # ---------------------------------------------------------------------------
-# Base de datos: MySQL, propia de este microservicio (no comparte la Mongo
-# de 'companies'). Requiere mysqlclient instalado (ver requirements.txt).
+# Base de datos: los materiales viven en MongoDB (ver materials/mongo.py,
+# conexión con pymongo, igual patrón que companies/mongo.py). Django igual
+# necesita un DATABASES configurado para sus tablas internas (admin, auth,
+# sesiones), así que se deja el sqlite por defecto — no se usa para los
+# materiales, solo para lo interno de Django.
 # ---------------------------------------------------------------------------
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": os.getenv("DB_NAME", "market_materials"),
-        "USER": os.getenv("DB_USER", "root"),
-        "PASSWORD": os.getenv("DB_PASSWORD", ""),
-        "HOST": os.getenv("DB_HOST", "localhost"),
-        "PORT": os.getenv("DB_PORT", "3306"),
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -94,7 +92,6 @@ DATABASES = {
 # borrar/comentar el AllowAny. No hay que tocar materials/views.py.
 # ---------------------------------------------------------------------------
 REST_FRAMEWORK = {
-    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",  # TEMPORAL: quitar cuando se active Firebase.
     ],
