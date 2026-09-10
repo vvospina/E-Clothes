@@ -4,6 +4,7 @@ from .views import MarketMaterialDetailView, MarketMaterialListCreateView, healt
 
 urlpatterns = [
     path("market-materials/", MarketMaterialListCreateView.as_view(), name="market-material-list"),
-    path("market-materials/<int:pk>/", MarketMaterialDetailView.as_view(), name="market-material-detail"),
+    # <str:pk> porque el id ahora es un ObjectId de Mongo (string), no un entero.
+    path("market-materials/<str:pk>/", MarketMaterialDetailView.as_view(), name="market-material-detail"),
     path("health/", health, name="health-check"),
 ]
