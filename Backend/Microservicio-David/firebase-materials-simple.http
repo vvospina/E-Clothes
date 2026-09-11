@@ -45,7 +45,7 @@ Accept: application/json
 
 {
   "material_type": "Algodón perchado",
-  "quantity": 300,
+  "quantity": 500,
   "unit": "metros",
   "color": "negro",
   "densidad": "muy pesado",

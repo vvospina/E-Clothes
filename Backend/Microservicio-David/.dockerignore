@@ -1,0 +1,24 @@
+.git/
+.vscode/
+.idea/
+
+**/venv/
+**/.venv/
+**/node_modules/
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/dist/
+**/build/
+
+# Archivos de entorno y credenciales (rutas relativas a Microservicio-David)
+.env
+.env.*
+ecoredv2.json
+firebase-service-account.json
+
+# Archivos temporales y de pruebas locales
+*.zip
+*.tar
+*.tar.gz
+*.log
