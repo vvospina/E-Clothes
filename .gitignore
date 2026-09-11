@@ -24,9 +24,4 @@ logs/
 .idea/
 .DS_Store
 
-# Microservicio David
-Backend/Microservicio-David/venv/
-Backend/Microservicio-David/.env
-Backend/Microservicio-David/ecoredv2.json
-Backend/Microservicio-David/firebase-service-account.json
 
