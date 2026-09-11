@@ -16,28 +16,28 @@ Accept: application/json
   "returnSecureToken": true
 }
 
-### 2. CONSULTAR MATERIALS CON EL TOKEN OBTENIDO
+### CONSULTAR MATERIAL CON EL TOKEN OBTENIDO
 GET {{BACKEND_URL}}/api/v1/materials/
 Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
 Accept: application/json
 
-### 3. CREAR UN MATERIAL NUEVO
+### CREAR UN MATERIAL NUEVO CON EL TOKEN OBTENIDO
 POST {{BACKEND_URL}}/api/v1/materials/
 Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
 Content-Type: application/json
 Accept: application/json
 
 {
-  "material_type": "Algodón perchado",
-  "quantity": 100,
+  "material_type": "Piel de durazno",
+  "quantity": 30,
   "unit": "metros",
-  "color": "negro",
-  "densidad": "pesado",
+  "color": "rosado",
+  "densidad": "media",
   "status": "available",
   "published_by": "demo-owner"
 }
 
-### 3. EDITAR UN MATERIAL NUEVO
+### EDITAR UN MATERIAL NUEVO CON EL TOKEN OBTENIDO
 PUT {{BACKEND_URL}}/api/v1/materials/6aa340d2372cc2b4cc1ab3b5/
 Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
 Content-Type: application/json
@@ -45,9 +45,14 @@ Accept: application/json
 
 {
   "material_type": "Algodón perchado",
-  "quantity": 200,
+  "quantity": 500,
   "unit": "metros",
   "color": "negro",
-  "densidad": "pesado",
+  "densidad": "muy pesado",
   "status": "available"
 }
+
+### ELIMINAR MATERIAL CON EL TOKEN OBTENIDO
+DELETE {{BACKEND_URL}}/api/v1/materials/6aa33ec5246864db1af0839d/
+Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
+Accept: application/json
