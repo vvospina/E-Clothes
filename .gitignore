@@ -7,7 +7,7 @@ venv/
 !.env.example
 
 firebase-service-account.json
-
+firebase-account-service.json
 __pycache__/
 *.pyc
 *.pyo
