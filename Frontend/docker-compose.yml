@@ -1,0 +1,119 @@
+# docker-compose de integración local para E-clothes.
+#
+# Supone la siguiente estructura de carpetas (la misma que se compartió en
+# los dos .zip del proyecto, uno junto al otro):
+#
+#   e-clothes/
+#     .env                        <- crear aquí (ver docs/F-frontend-eclothes.md)
+#     Frontend/                   <- este repositorio (aquí vive este archivo)
+#     Backend/
+#       Microservicio-David/      (insumos)      -> ya tiene Dockerfile
+#       Microservicio-Camilo/     (materiales de mercado) -> ya tiene Dockerfile
+#       Microservicio-Sara/       (consejos)     -> ya tiene Dockerfile
+#       Microservicio-Nicol/      (prendas)      -> sin código todavía, se omite
+#
+#
+# NOTA SOBRE PUERTOS: cada microservicio corre su propio Nginx interno que
+# escucha en el puerto 10000 y reenvía a Gunicorn (127.0.0.1:8000) DENTRO del
+# mismo contenedor. Por eso, desde afuera (y desde este compose) siempre se
+# habla con cada microservicio por el puerto 10000, nunca el 8000.
+#
+# NOTA SOBRE MONGO: los nombres de la variable de conexión NO son iguales en
+# los 3 microservicios (cada quien nombró la suya distinto):
+#   - David  (insumos):            MONGODB_URI / MONGODB_DB_NAME
+#   - Camilo (materiales-mercado): MONGO_URI   / MONGO_DB_NAME
+#   - Sara   (consejos):           MONGODB_URI / MONGODB_DB_NAME
+#
+# NOTA SOBRE CREDENCIALES FIREBASE: David y Sara leen FIREBASE_CREDENTIALS_PATH
+# (la ruta a un .json de cuenta de servicio) y ninguno de los dos incluyó ese
+# archivo en su carpeta — sin él, sus contenedores no van a arrancar. Pídeselos
+# o pide que generen el suyo propio desde la consola de Firebase
+# (Configuración del proyecto → Cuentas de servicio → Generar nueva clave
+# privada) y lo coloquen en su carpeta.
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: /api/v1
+        VITE_FIREBASE_API_KEY: ${VITE_FIREBASE_API_KEY}
+        VITE_FIREBASE_AUTH_DOMAIN: ${VITE_FIREBASE_AUTH_DOMAIN}
+        VITE_FIREBASE_PROJECT_ID: ${VITE_FIREBASE_PROJECT_ID}
+        VITE_FIREBASE_APP_ID: ${VITE_FIREBASE_APP_ID}
+        # Pon en "false" el módulo correspondiente en cuanto el backend real
+        # cumpla su ruta del contrato (ver docs/F-frontend-eclothes.md).
+        VITE_MOCK_INSUMOS: "true"
+        VITE_MOCK_MATERIALES_MERCADO: "true"
+        VITE_MOCK_CONSEJOS: "false"
+        VITE_MOCK_PRENDAS: "true"
+    ports:
+      - "8080:80"
+    environment:
+      # Usados por la plantilla de Nginx (docker/nginx/default.conf.template)
+      # para saber a qué contenedor reenviar cada ruta /api/v1/<recurso>.
+      # Puerto 10000: es el nginx interno de cada microservicio (ver nota arriba).
+      INSUMOS_SERVICE_URL: http://insumos-service:10000
+      MERCADO_SERVICE_URL: http://mercado-service:10000
+      CONSEJOS_SERVICE_URL: http://consejos-service:10000
+      PRENDAS_SERVICE_URL: http://prendas-service:10000
+    depends_on:
+      - consejos-service
+    networks:
+      - eclothes-net
+
+  insumos-service:
+    build:
+      context: ../Backend/Microservicio-David
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-changeme}
+      DJANGO_DEBUG: "True"
+      DJANGO_ALLOWED_HOSTS: "*"
+      CORS_ALLOWED_ORIGINS: http://localhost:8080
+      MONGODB_URI: ${INSUMOS_MONGODB_URI}
+      MONGODB_DB_NAME: eco_clothes_db2
+      FIREBASE_CREDENTIALS_PATH: /app/firebase-account-service.json
+    networks:
+      - eclothes-net
+
+  mercado-service:
+    build:
+      # OJO: el Dockerfile de Camilo vive en la raíz de su carpeta, no en
+      # materials_app/ (a diferencia de lo que se asumió en una versión
+      # anterior de este archivo).
+      context: ../Backend/Microservicio-Camilo
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-changeme}
+      DJANGO_DEBUG: "True"
+      DJANGO_ALLOWED_HOSTS: "*"
+      CORS_ALLOWED_ORIGINS: http://localhost:8080
+      MONGO_URI: ${MERCADO_MONGO_URI}
+      MONGO_DB_NAME: market_materials
+      FIREBASE_CREDENTIALS_PATH: /app/firebase-account-service.json
+    networks:
+      - eclothes-net
+
+  consejos-service:
+    build:
+      context: ../Backend/Microservicio-Sara/consejos-service
+    environment:
+      MONGODB_URI: ${CONSEJOS_MONGODB_URI}
+      MONGODB_DB_NAME: ecored_circular_db
+      FIREBASE_CREDENTIALS_PATH: /app/firebase-account-service.json
+    networks:
+      - eclothes-net
+
+  # prendas-service (Nicol) todavía no tiene código ni Dockerfile.
+  # Descomenta este bloque cuando su microservicio esté listo.
+  # prendas-service:
+  #   build:
+  #     context: ../Backend/Microservicio-Nicol
+  #   environment:
+  #     MONGODB_URI: ${PRENDAS_MONGODB_URI}
+  #   networks:
+  #     - eclothes-net
+
+networks:
+  eclothes-net:
+    driver: bridge

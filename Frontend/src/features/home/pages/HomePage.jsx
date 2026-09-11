@@ -2,7 +2,7 @@ import ModuleCard from "../../../shared/components/ModuleCard.jsx";
 import useAuth from "../../auth/hooks/useAuth.js";
 
 /**
- * Panel inicial del usuario autenticado.
+ * Panel inicial del usuario autenticado en E-clothes.
  */
 export default function HomePage() {
   const { user } = useAuth();
@@ -32,23 +32,43 @@ export default function HomePage() {
       </article>
 
       <div className="row g-4">
-        <div className="col-md-6">
+        <div className="col-md-6 col-xl-3">
           <ModuleCard
-            title="Empresas"
-            description="Registra empresas asociadas al usuario autenticado y deja disponible la información para otros módulos."
-            to="/companies"
-            actionLabel="Ir a Empresas"
+            title="Insumos"
+            description="Crea, edita y consulta los insumos disponibles para confección."
+            to="/insumos"
+            actionLabel="Ir a Insumos"
             variant="primary"
           />
         </div>
 
-        <div className="col-md-6">
+        <div className="col-md-6 col-xl-3">
           <ModuleCard
-            title="Materiales"
-            description="Consulta y registra publicaciones de materiales relacionadas con las empresas disponibles."
-            to="/materials"
+            title="Materiales de mercado"
+            description="Consulta la valoración económica de materiales disponibles."
+            to="/materiales-mercado"
             actionLabel="Ir a Materiales"
             variant="success"
+          />
+        </div>
+
+        <div className="col-md-6 col-xl-3">
+          <ModuleCard
+            title="Consejos"
+            description="Publica y consulta consejos de sostenibilidad e impacto ambiental."
+            to="/consejos"
+            actionLabel="Ir a Consejos"
+            variant="secondary"
+          />
+        </div>
+
+        <div className="col-md-6 col-xl-3">
+          <ModuleCard
+            title="Prendas"
+            description="Crea, edita y consulta las prendas publicadas."
+            to="/prendas"
+            actionLabel="Ir a Prendas"
+            variant="dark"
           />
         </div>
       </div>

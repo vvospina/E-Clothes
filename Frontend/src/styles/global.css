@@ -1,3 +1,14 @@
+/* Tipografías de marca: Plus Jakarta Sans para títulos, Inter para cuerpo y
+   etiquetas (paleta y tipografías definidas en la guía de diseño de E-clothes). */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap");
+
+/* ---------------------------------------------------------------------- */
+/* Paleta de marca E-clothes                                              */
+/* Primary   #059669  (emerald)                                          */
+/* Secondary #6EE7B7  (mint)                                             */
+/* Tertiary  #065F46  (deep green)                                       */
+/* Neutral   #0F172A  (slate)                                            */
+/* ---------------------------------------------------------------------- */
 :root {
   font-family:
     Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -7,6 +18,27 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --brand-primary: #059669;
+  --brand-secondary: #6ee7b7;
+  --brand-tertiary: #065f46;
+  --brand-neutral: #0f172a;
+
+  /* Redefine las variables de Bootstrap 5.3 para que toda utilidad basada en
+     RGBA (bg-primary, text-primary, border-primary, text-bg-*, etc.) siga la
+     paleta de marca sin recompilar Bootstrap. */
+  --bs-primary: var(--brand-primary);
+  --bs-primary-rgb: 5, 150, 105;
+  --bs-secondary: var(--brand-secondary);
+  --bs-secondary-rgb: 110, 231, 183;
+  --bs-success: var(--brand-primary);
+  --bs-success-rgb: 5, 150, 105;
+  --bs-dark: var(--brand-neutral);
+  --bs-dark-rgb: 15, 23, 42;
+  --bs-link-color: var(--brand-primary);
+  --bs-link-color-rgb: 5, 150, 105;
+  --bs-link-hover-color: var(--brand-tertiary);
+  --bs-link-hover-color-rgb: 6, 95, 70;
 }
 
 * {
@@ -32,13 +64,116 @@ select {
   font: inherit;
 }
 
+/* Los encabezados usan la tipografía de titulares de la marca. */
+h1,
+h2,
+h3,
+.h1,
+.h2,
+.h3,
+.navbar-brand {
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+}
+
+/* --------------------------- Componentes de Bootstrap ------------------- */
+/* .btn-primary, .btn-outline-primary y .btn-success fijan sus colores como
+   valores literales en el CSS compilado de Bootstrap, así que se sobreescriben
+   sus variables locales directamente para reflejar la paleta de marca. */
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--brand-primary);
+  --bs-btn-border-color: var(--brand-primary);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--brand-tertiary);
+  --bs-btn-hover-border-color: var(--brand-tertiary);
+  --bs-btn-active-bg: var(--brand-tertiary);
+  --bs-btn-active-border-color: var(--brand-tertiary);
+  --bs-btn-disabled-bg: var(--brand-primary);
+  --bs-btn-disabled-border-color: var(--brand-primary);
+  --bs-btn-focus-shadow-rgb: 5, 150, 105;
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--brand-primary);
+  --bs-btn-border-color: var(--brand-primary);
+  --bs-btn-hover-bg: var(--brand-primary);
+  --bs-btn-hover-border-color: var(--brand-primary);
+  --bs-btn-active-bg: var(--brand-primary);
+  --bs-btn-active-border-color: var(--brand-primary);
+  --bs-btn-disabled-color: var(--brand-primary);
+  --bs-btn-disabled-border-color: var(--brand-primary);
+  --bs-btn-focus-shadow-rgb: 5, 150, 105;
+}
+
+.btn-success {
+  --bs-btn-color: var(--brand-neutral);
+  --bs-btn-bg: var(--brand-secondary);
+  --bs-btn-border-color: var(--brand-secondary);
+  --bs-btn-hover-color: var(--brand-neutral);
+  --bs-btn-hover-bg: #5cd8a6;
+  --bs-btn-hover-border-color: #5cd8a6;
+  --bs-btn-active-color: var(--brand-neutral);
+  --bs-btn-active-bg: #5cd8a6;
+  --bs-btn-active-border-color: #5cd8a6;
+  --bs-btn-disabled-color: var(--brand-neutral);
+  --bs-btn-disabled-bg: var(--brand-secondary);
+  --bs-btn-disabled-border-color: var(--brand-secondary);
+  --bs-btn-focus-shadow-rgb: 110, 231, 183;
+}
+
+.btn-secondary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--brand-tertiary);
+  --bs-btn-border-color: var(--brand-tertiary);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #054733;
+  --bs-btn-hover-border-color: #054733;
+  --bs-btn-active-bg: #054733;
+  --bs-btn-active-border-color: #054733;
+  --bs-btn-disabled-bg: var(--brand-tertiary);
+  --bs-btn-disabled-border-color: var(--brand-tertiary);
+  --bs-btn-focus-shadow-rgb: 6, 95, 70;
+}
+
+.btn-dark {
+  --bs-btn-bg: var(--brand-neutral);
+  --bs-btn-border-color: var(--brand-neutral);
+  --bs-btn-hover-bg: #1e293b;
+  --bs-btn-hover-border-color: #1e293b;
+  --bs-btn-active-bg: #1e293b;
+  --bs-btn-active-border-color: #1e293b;
+  --bs-btn-disabled-bg: var(--brand-neutral);
+  --bs-btn-disabled-border-color: var(--brand-neutral);
+}
+
+.btn-outline-dark {
+  --bs-btn-color: var(--brand-neutral);
+  --bs-btn-border-color: var(--brand-neutral);
+  --bs-btn-hover-bg: var(--brand-neutral);
+  --bs-btn-hover-border-color: var(--brand-neutral);
+  --bs-btn-active-bg: var(--brand-neutral);
+  --bs-btn-active-border-color: var(--brand-neutral);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.25);
+}
+
+.spinner-border.text-primary {
+  color: var(--brand-primary) !important;
+}
+
+/* ------------------------------ Layout general -------------------------- */
 .app-shell {
   min-height: 100vh;
 }
 
 .page-title {
   margin: 0 0 0.35rem;
-  color: #172b4d;
+  color: var(--brand-neutral);
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 700;
   letter-spacing: -0.04em;
@@ -83,8 +218,12 @@ select {
 }
 
 .navbar .nav-link.active {
-  color: #0d6efd;
+  color: var(--brand-primary);
   font-weight: 600;
+}
+
+.navbar-brand {
+  color: var(--brand-neutral) !important;
 }
 
 .user-email {
@@ -105,13 +244,4 @@ select {
   .card-body {
     padding: 1.25rem !important;
   }
-}
-
-.startup-error-card {
-  width: min(100%, 42rem);
-  border-left: 0.35rem solid #dc3545;
-}
-
-.startup-error-card code {
-  color: #842029;
 }

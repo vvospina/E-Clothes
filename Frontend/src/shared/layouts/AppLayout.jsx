@@ -2,7 +2,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import useAuth from "../../features/auth/hooks/useAuth.js";
 
 /**
- * Estructura visual común para todas las rutas privadas.
+ * Estructura visual común para todas las rutas privadas de E-clothes.
  */
 export default function AppLayout() {
   const { user, logout } = useAuth();
@@ -21,7 +21,7 @@ export default function AppLayout() {
       <nav className="navbar navbar-expand-lg bg-white border-bottom shadow-sm">
         <div className="container">
           <NavLink className="navbar-brand fw-semibold" to="/home">
-            EcoRed Circular
+            E-clothes
           </NavLink>
 
           <button
@@ -41,11 +41,17 @@ export default function AppLayout() {
               <NavLink className={navClassName} to="/home">
                 Inicio
               </NavLink>
-              <NavLink className={navClassName} to="/companies">
-                Empresas
+              <NavLink className={navClassName} to="/insumos">
+                Insumos
               </NavLink>
-              <NavLink className={navClassName} to="/materials">
-                Materiales
+              <NavLink className={navClassName} to="/materiales-mercado">
+                Materiales de mercado
+              </NavLink>
+              <NavLink className={navClassName} to="/consejos">
+                Consejos
+              </NavLink>
+              <NavLink className={navClassName} to="/prendas">
+                Prendas
               </NavLink>
             </div>
 

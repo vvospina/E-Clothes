@@ -34,6 +34,15 @@ function normalize(value) {
 }
 
 /**
+ * Interpreta una variable booleana de Vite. Solo "true" (sin distinguir
+ * mayúsculas) se considera verdadero; cualquier otro valor, incluido vacío,
+ * se considera falso.
+ */
+function parseBoolean(value) {
+  return normalize(value).toLowerCase() === "true";
+}
+
+/**
  * Devuelve las variables obligatorias que no tienen un valor configurado.
  */
 export function getMissingEnvironmentVariables() {
@@ -52,6 +61,13 @@ export function isEnvironmentConfigured() {
  *
  * main.jsx valida primero los valores. Por ello, los módulos funcionales solo
  * se importan cuando este objeto contiene una configuración completa.
+ *
+ * `mocks` controla, por módulo, si el servicio correspondiente responde con
+ * datos simulados en memoria en lugar de llamar al backend real. Esto permite
+ * cumplir la Fase 1 del taller (frontend probado con mocks mientras las APIs
+ * reales no cumplen todavía el contrato). Cuando el microservicio respectivo
+ * ya expone las rutas del contrato (/api/v1/<recurso>), basta con poner su
+ * variable en "false" en el .env, sin tocar código.
  */
 export const env = Object.freeze({
   apiUrl: normalize(rawEnv.VITE_API_URL).replace(/\/+$/, ""),
@@ -60,5 +76,13 @@ export const env = Object.freeze({
     authDomain: normalize(rawEnv.VITE_FIREBASE_AUTH_DOMAIN),
     projectId: normalize(rawEnv.VITE_FIREBASE_PROJECT_ID),
     appId: normalize(rawEnv.VITE_FIREBASE_APP_ID),
+  }),
+  mocks: Object.freeze({
+    insumos: parseBoolean(import.meta.env.VITE_MOCK_INSUMOS ?? "true"),
+    materialesMercado: parseBoolean(
+      import.meta.env.VITE_MOCK_MATERIALES_MERCADO ?? "true",
+    ),
+    consejos: parseBoolean(import.meta.env.VITE_MOCK_CONSEJOS ?? "false"),
+    prendas: parseBoolean(import.meta.env.VITE_MOCK_PRENDAS ?? "true"),
   }),
 });
