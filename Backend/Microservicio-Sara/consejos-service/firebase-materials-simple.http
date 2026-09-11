@@ -1,0 +1,45 @@
+# ============================================================
+# PRUEBA: Firebase Authentication + Microservicio Consejos
+# Extensión de VS Code: REST Client
+# ============================================================
+
+@FIREBASE_API_KEY = AIzaSyCa0z_T4qXgmGQmuTRg4iHpMKGxLI5oZyk
+@EMAIL = nperez@uniempresarial.edu.co
+@PASSWORD = 123456+
+@BACKEND_URL = http://127.0.0.1:8000
+
+
+### 1. INICIAR SESIÓN EN FIREBASE (Obtiene el Token)
+# @name firebaseLogin
+POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={{FIREBASE_API_KEY}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "{{EMAIL}}",
+  "password": "{{PASSWORD}}",
+  "returnSecureToken": true
+}
+
+### 2. PROBAR RUTA DE SALUD (Health Check - Pública)
+GET {{BACKEND_URL}}/api/v1/health/
+Accept: application/json
+
+
+### 3. CONSULTAR CONSEJOS (Con filtro por categoría)
+GET {{BACKEND_URL}}/api/v1/consejos/?categoria=Moda Sostenible
+Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
+Accept: application/json
+
+
+### 4. CREAR UN NUEVO CONSEJO (Requiere autenticación)
+POST {{BACKEND_URL}}/api/v1/consejos/
+Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "titulo": "Uso de materiales reciclados",
+  "contenido": "Prefiere prendas hechas con algodón orgánico o poliéster reciclado para reducir la huella de carbono.",
+  "categoria": "Moda Sostenible"
+}
