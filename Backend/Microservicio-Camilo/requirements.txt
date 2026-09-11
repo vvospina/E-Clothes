@@ -11,7 +11,6 @@ cryptography==49.0.0
 Django==6.0.7
 django-cors-headers==4.9.0
 djangorestframework==3.17.1
-gunicorn==26.0.0
 h11==0.16.0
 h2==4.4.0
 hpack==4.2.0
@@ -31,7 +30,7 @@ urllib3==2.7.0
 # =============================================================
 # MongoDB — reactivadas (mismo driver que usa companies/mongo.py)
 # =============================================================
-pymongo==4.17.0
+pymongo==4.15.1
 dnspython==2.8.0
 
 # =============================================================
@@ -56,6 +55,7 @@ protobuf==7.35.1
 pyasn1==0.6.4
 pyasn1_modules==0.4.2
 pycparser==3.0
+gunicorn==23.0.0
 
 # =============================================================
 # ELIMINADAS: eran solo para el enfoque anterior con MySQL/ORM.

@@ -1,26 +1,17 @@
 # ============================================================
-# PRUEBA SIMPLE: Firebase Authentication + Django REST Framework
+# PRUEBA: Firebase Authentication + Materials (Django REST Framework)
 # Extensión de VS Code: REST Client
 #
 # INSTRUCCIONES:
-# 1. Copie la Web API Key desde Firebase:
-#    Firebase Console > Configuración del proyecto > General
-#    > Sus apps > seleccione la aplicación web
-#    > Configuración del SDK > copie el valor de apiKey.
-#
-# 2. Pegue la clave en FIREBASE_API_KEY.
-# 3. Escriba el correo y la contraseña de un usuario registrado
-#    en Firebase Authentication.
-# 4. Presione "Send Request" primero en INICIAR SESIÓN.
-# 5. Después presione "Send Request" en CONSULTAR MATERIALES.
-#
-
-
+# 1. Presiona "Send Request" en INICIAR SESIÓN primero.
+# 2. Luego puedes correr cualquiera de las demás en el orden que quieras
+#    (CREAR debe correrse antes que CONSULTAR/EDITAR/ELIMINAR, porque
+#    esas usan el id que devuelve CREAR).
 # ============================================================
 
-@FIREBASE_API_KEY = AIzaSyDesRHQrUuTp0HwGuOJPnIj8MegCFkK_yw
-@EMAIL = usuario45@gmai.com
-@PASSWORD = usuario45
+@FIREBASE_API_KEY = AIzaSyCa0z_T4qXgmGQmuTRg4iHpMKGxLI5oZyk
+@EMAIL = nperez@uniempresarial.edu.co
+@PASSWORD = 123456+
 @BACKEND_URL = http://127.0.0.1:8000
 
 
@@ -31,27 +22,70 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "{{EMAIL}}",
-  "password": "{{PASSWORD}}",
+  "email": "nperez@uniempresarial.edu.co",
+  "password": "123456+",
   "returnSecureToken": true
 }
 
 
+### 2. LISTAR MATERIALES (GET, no necesita token)
+GET {{BACKEND_URL}}/api/v1/market-materials/
 
-### 2. CREAR EMPRESA PARA EL USUARIO AUTENTICADO
-POST {{BACKEND_URL}}/api/companies/
+
+### 3. CREAR UN MATERIAL (POST, requiere token)
+# @name crear
+POST {{BACKEND_URL}}/api/v1/market-materials/
 Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
 Content-Type: application/json
-Accept: application/json
 
 {
-  "name": "uniempresarial",
-  "nit": "987654321-7",
-  "city": "bogota",
-  "sector": "educacion"
+  "name": "Tela de algodón",
+  "material_type": "tela",
+  "presentation": "retazo",
+  "price": "6000.00",
+  "supplier": "Textiles Bogotá"
 }
 
-### 2. CONSULTAR companies CON EL TOKEN OBTENIDO
-GET {{BACKEND_URL}}/api/companies/
+
+### 4. CONSULTAR ESE MATERIAL POR ID (no necesita token)
+GET {{BACKEND_URL}}/api/v1/market-materials/{{crear.response.body.$.id}}/
+
+
+### 5. EDITAR PARCIALMENTE (PATCH, requiere token)
+PATCH {{BACKEND_URL}}/api/v1/market-materials/{{crear.response.body.$.id}}/
 Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
-Accept: application/json
+Content-Type: application/json
+
+{
+  "price": "6500.00"
+}
+
+
+### 6. REEMPLAZAR TOTAL (PUT, requiere token, manda TODOS los campos obligatorios)
+PUT {{BACKEND_URL}}/api/v1/market-materials/{{crear.response.body.$.id}}/
+Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
+Content-Type: application/json
+
+{
+  "name": "Tela de algodón (editada)",
+  "material_type": "tela",
+  "presentation": "retazo",
+  "price": "7000.00"
+}
+
+
+### 7. ELIMINAR (DELETE, requiere token)
+DELETE {{BACKEND_URL}}/api/v1/market-materials/{{crear.response.body.$.id}}/
+Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
+
+
+### 8. INTENTAR CREAR SIN TOKEN (debe dar 401/403)
+POST {{BACKEND_URL}}/api/v1/market-materials/
+Content-Type: application/json
+
+{
+  "name": "No debería crearse",
+  "material_type": "tela",
+  "presentation": "metro",
+  "price": "1000.00"
+}

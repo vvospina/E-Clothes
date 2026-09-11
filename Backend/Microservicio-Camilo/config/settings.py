@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "corsheaders",
-    "materials_app.materials",
+    "materials",
 ]
 
 # Define la cadena de middlewares que procesa cada solicitud HTTP.
@@ -85,22 +85,17 @@ DATABASES = {
 # ---------------------------------------------------------------------------
 # Django REST Framework.
 #
-# MIENTRAS el equipo termina de configurar el nuevo proyecto Firebase, se
-# deja todo abierto (AllowAny) para poder construir y probar el CRUD.
-#
-# CUANDO el nuevo Firebase esté listo, descomentar el bloque de abajo y
-# borrar/comentar el AllowAny. No hay que tocar materials/views.py.
+# Autenticación Firebase ACTIVADA: las lecturas (GET) siguen siendo públicas,
+# pero escribir (POST/PUT/PATCH/DELETE) exige un token válido en el header
+# Authorization: Bearer <idToken>.
 # ---------------------------------------------------------------------------
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",  # TEMPORAL: quitar cuando se active Firebase.
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "materials.firebase_auth.FirebaseAuthentication",
     ],
-    # "DEFAULT_AUTHENTICATION_CLASSES": [
-    #     "materials.firebase_auth.FirebaseAuthentication",
-    # ],
-    # "DEFAULT_PERMISSION_CLASSES": [
-    #     "rest_framework.permissions.IsAuthenticatedOrReadOnly",
-    # ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ],
 }
 
 # Configuración general de idioma y zona horaria.

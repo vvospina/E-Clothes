@@ -58,6 +58,13 @@ class MarketMaterialListCreateView(APIView):
     # No se define permission_classes aquí a propósito: se hereda de
     # REST_FRAMEWORK["DEFAULT_PERMISSION_CLASSES"] en settings.py.
 
+    serializer_class = MarketMaterialSerializer  # Permite que la API navegable dibuje el formulario.
+
+    def get_serializer(self, *args, **kwargs):
+        # APIView no trae este método por defecto (a diferencia de los generics);
+        # se agrega solo para que el renderer HTML sepa qué campos mostrar.
+        return self.serializer_class(*args, **kwargs)
+
     def get(self, request):
         query = _build_query(request.query_params)
         cursor = market_materials_collection.find(query).sort(
@@ -87,6 +94,11 @@ class MarketMaterialListCreateView(APIView):
 
 class MarketMaterialDetailView(APIView):
     # GET/PUT/PATCH/DELETE sobre un material puntual, identificado por su ObjectId.
+
+    serializer_class = MarketMaterialSerializer  # Permite que la API navegable dibuje el formulario.
+
+    def get_serializer(self, *args, **kwargs):
+        return self.serializer_class(*args, **kwargs)
 
     def _get_object(self, pk):
         # Convierte el string de la URL a ObjectId; si no es válido, no existe.

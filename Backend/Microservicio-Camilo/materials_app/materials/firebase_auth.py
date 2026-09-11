@@ -7,27 +7,10 @@ from rest_framework import exceptions  # Excepciones estándar de autenticación
 from dotenv import load_dotenv  # Carga variables desde el archivo .env.
 from pathlib import Path  # Manejo robusto de rutas del sistema de archivos.
 
-# ---------------------------------------------------------------------------
-# IMPORTANTE: este archivo es una copia exacta del patrón usado en
-# companies/firebase_auth.py, adaptada a este microservicio. Está lista para
-# usarse, pero NO debe importarse todavía en settings.py: al importarse,
-# inicializa Firebase Admin inmediatamente y si FIREBASE_CREDENTIALS_PATH no
-# apunta a un JSON válido, revienta el arranque del proyecto con RuntimeError.
-#
-# Cuando el equipo termine de crear el nuevo proyecto Firebase:
-#   1. Coloca el JSON de credenciales en este repo (nunca en git) y apunta
-#      FIREBASE_CREDENTIALS_PATH hacia él en el .env.
-#   2. En settings.py agrega "materials.firebase_auth.FirebaseAuthentication"
-#      a DEFAULT_AUTHENTICATION_CLASSES y cambia DEFAULT_PERMISSION_CLASSES a
-#      ["rest_framework.permissions.IsAuthenticatedOrReadOnly"].
-#   3. Listo: las vistas de materials/views.py no necesitan ningún cambio,
-#      porque heredan los permisos desde settings.
-# ---------------------------------------------------------------------------
-
 logger = logging.getLogger(__name__)  # Crea un logger asociado a este módulo.
 
 # Calcula la ruta base del backend a partir de la ubicación de este archivo.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Carga las variables definidas en el .env del repo para poder leerlas con os.getenv().
 load_dotenv(BASE_DIR / ".env")
