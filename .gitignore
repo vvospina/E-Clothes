@@ -24,4 +24,6 @@ logs/
 .idea/
 .DS_Store
 
-
+# Ignorar credenciales específicas de Firebase / GCP
+**/ecoredv2.json
+**/*service-account*.json
