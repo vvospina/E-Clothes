@@ -1,0 +1,52 @@
+# ── Secretos: NUNCA deben subirse al repositorio ──
+.env
+.env.*
+!.env.example
+ecoredv2.json
+firebase*credentials.json
+serviceAccount.json
+*.pem
+*.key
+
+# ── Entorno virtual (Windows/Linux) ──
+venv/
+.venv/
+env/
+ENV/
+
+# ── Python ──
+_pycache_/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# ── Base de datos local ──
+db.sqlite3
+db.sqlite3-journal
+*.sqlite3
+
+# ── Django ──
+staticfiles/
+media/
+*.log
+
+# ── Pruebas / cobertura ──
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# ── Editores / SO ──
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ── Docker ──
+*.env.docker
+
+# ── Node (si el frontend vive en el mismo repo) ──
+node_modules

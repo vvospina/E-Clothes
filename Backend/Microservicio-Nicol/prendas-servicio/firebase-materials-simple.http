@@ -1,0 +1,92 @@
+# ============================================================
+# PRUEBA SIMPLE: Firebase Authentication + Django REST Framework
+# Extensión de VS Code: REST Client
+#
+# INSTRUCCIONES:
+# 1. Copie la Web API Key desde Firebase:
+#    Firebase Console > Configuración del proyecto > General
+#    > Sus apps > seleccione la aplicación web
+#    > Configuración del SDK > copie el valor de apiKey.
+#
+# 2. Pegue la clave en FIREBASE_API_KEY.
+# 3. Escriba el correo y la contraseña de un usuario registrado
+#    en Firebase Authentication.
+# 4. Presione "Send Request" primero en INICIAR SESIÓN.
+# 5. Después presione "Send Request" en CONSULTAR MATERIALES.
+#
+
+
+# ============================================================
+
+@FIREBASE_API_KEY = AIzaSyCa0z_T4qXgmGQmuTRg4iHpMKGxLI5oZyk
+
+@EMAIL = nperez@uniempresarial.edu.co
+@PASSWORD = 123456+
+@BACKEND_URL = http://127.0.0.1:8000
+
+
+### 1. INICIAR SESIÓN EN FIREBASE
+# @name firebaseLogin
+POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={{FIREBASE_API_KEY}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "{{EMAIL}}",
+  "password": "{{PASSWORD}}",
+  "returnSecureToken": true
+}
+
+
+
+### 3. CREAR UNA PRENDA (POST, requiere token)
+### disponible, agotada, reservada
+# @name crear
+POST {{BACKEND_URL}}/api/v1/prendas/
+Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
+Content-Type: application/json
+
+{
+  "nombre": "Pantalon jean",
+  "descripcion": "Talla 4",
+  "categoria": "pantalon",
+  "cantidad": 8,
+  "estado": "reservada" 
+}
+
+
+### 4. CONSULTAR ESA PRENDA POR ID (no necesita token)
+GET {{BACKEND_URL}}/api/v1/prendas/{{crear.response.body.$.id}}/
+
+
+### 5. EDITAR PARCIALMENTE (PATCH, requiere token)
+PATCH {{BACKEND_URL}}/api/v1/prendas/{{crear.response.body.$.id}}/
+Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
+Content-Type: application/json
+
+{
+  "cantidad": 1,
+  "estado": "reservada"
+}
+
+
+### 6. REEMPLAZAR TOTAL (PUT, requiere token, manda TODOS los campos obligatorios)
+PUT {{BACKEND_URL}}/api/v1/prendas/{{crear.response.body.$.id}}/
+Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
+Content-Type: application/json
+
+{
+  "nombre": "Falda jean",
+  "categoria": "falda",
+  "cantidad": 8,
+  "estado": "reservada"
+}
+
+
+### 7. ELIMINAR (DELETE, requiere token)
+DELETE {{BACKEND_URL}}/api/v1/prendas/{{crear.response.body.$.id}}/
+Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
+
+
+### 8. CONFIRMAR QUE YA NO EXISTE (debe dar 404)
+GET {{BACKEND_URL}}/api/v1/prendas/{{crear.response.body.$.id}}/

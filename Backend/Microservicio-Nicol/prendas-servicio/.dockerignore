@@ -1,0 +1,28 @@
+# Entorno virtual local (Docker instalará sus propios paquetes vía requirements.txt)
+venv/
+.venv/
+
+# Caché de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Base de datos SQLite local (creada fuera del contenedor)
+db.sqlite3
+*.sqlite3
+
+# Control de versiones
+.git/
+.gitignore
+
+
+# Dockerfiles (no se necesitan dentro del contenedor construido)
+Dockerfile
+docker-compose.yaml
+.dockerignore
+
+# Carpetas de configuración del editor (VS Code / PyCharm)
+
+.vscode/
+.idea/
