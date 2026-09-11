@@ -45,7 +45,7 @@ Accept: application/json
 
 {
   "material_type": "Algodón perchado",
-  "quantity": 500,
+  "quantity": 300,
   "unit": "metros",
   "color": "negro",
   "densidad": "muy pesado",
@@ -53,6 +53,6 @@ Accept: application/json
 }
 
 ### ELIMINAR MATERIAL CON EL TOKEN OBTENIDO
-DELETE {{BACKEND_URL}}/api/v1/materials/6aa33ec5246864db1af0839d/
+DELETE {{BACKEND_URL}}/api/v1/materials/<6aa33d81686523a027278608>/
 Authorization: Bearer {{firebaseLogin.response.body.$.idToken}}
 Accept: application/json
