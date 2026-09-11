@@ -21,7 +21,6 @@ class Command(BaseCommand):
                 "unit": "metros",
                 "color": "azul",
                 "densidad": "pesado",
-                "location": "Bogotá",
                 "status": "available",
                 "published_by": "demo-owner",
                 "created_at": datetime.now(timezone.utc).isoformat(),
