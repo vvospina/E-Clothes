@@ -1,4 +1,4 @@
-# Microservicio de Materiales - EcoRed / E-Clothes
+# Microservicio de Materiales - EcoRed // E-Clothes
 
 Microservicio backend desarrollado con **Django REST Framework** y **MongoDB** para la gestión de publicaciones de materiales sobrantes a la venta dentro del sistema EcoRed. El proyecto implementa un modelo de seguridad basado en autenticación por tokens de **Firebase** y estructuración modular por componentes.
 
